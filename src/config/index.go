@@ -1,11 +1,11 @@
 package config
 
 var (
-	ApiAuthConfig = map[string] map[string]string {
-		"DEMO" : {
-			"md5" : "IgkibX71IEf382PT",
-			"aes" : "IgkibX71IEf382PT",
-			"rsa" : "rsa/public.pem",
+	ApiAuthConfig = map[string]map[string]string{
+		"DEMO": {
+			"md5": "IgkibX71IEf382PT",
+			"aes": "IgkibX71IEf382PT",
+			"rsa": "rsa/public.pem",
 		},
 	}
 )
@@ -22,20 +22,14 @@ const (
 	AppReadTimeout  = 120
 	AppWriteTimeout = 120
 
-	AppAccessLogName = "log/" + AppName + "-access.log"
-	AppErrorLogName  = "log/" + AppName + "-error.log"
-	AppGrpcLogName   = "log/" + AppName + "-grpc.log"
-
-	SystemEmailUser = "xinliangnote@163.com"
-	SystemEmailPass = "" //密码或授权码
-	SystemEmailHost = "smtp.163.com"
-	SystemEmailPort = 465
-
-	ErrorNotifyUser = "xinliangnote@163.com"
+	AppAccessLogName = "src/log/" + AppName + "-access.log"
+	AppErrorLogName  = "src/log/" + AppName + "-error.log"
+	AppGrpcLogName   = "src/log/" + AppName + "-grpc.log"
 
 	ErrorNotifyOpen = -1
 
-	JaegerHostPort = "127.0.0.1:6831"
-
-	JaegerOpen = 1
+	DatabaseURl      = ""
+	DatabasePort     = ""
+	DatabaseUsername = ""
+	DatabasePassword = ""
 )

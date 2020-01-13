@@ -25,11 +25,11 @@ func (w BodyLogWriterS) Write(b []byte) (int, error) {
 	return w.ResponseWriter.Write(b)
 }
 
-func Setup() gin.HandlerFunc {
+func SetupLogger() gin.HandlerFunc {
 	go handleAccessChannel()
 
 	return func(c *gin.Context) {
-		bodyLogWriter := &BodyLogWriterS{ body:bytes.NewBufferString(""), ResponseWriter: c.Writer }
+		bodyLogWriter := &BodyLogWriterS{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
 		c.Writer = bodyLogWriter
 
 		startTime := time.GetCurrentMilliUnix()
@@ -40,11 +40,11 @@ func Setup() gin.HandlerFunc {
 
 		var responseCode int
 		var responseMsg string
-		var responseData interface {}
+		var responseData interface{}
 
 		if responseBody != "" {
-			res := response.ResS{}
-			err := json.Unmarshal([] byte(responseBody), &res)
+			res := util.ResS{}
+			err := json.Unmarshal([]byte(responseBody), &res)
 			if err != nil {
 				responseCode = res.Code
 				responseMsg = res.Message
@@ -60,18 +60,18 @@ func Setup() gin.HandlerFunc {
 
 		accessLogMap := make(map[string]interface{})
 
-		accessLogMap["request_time"]      = startTime
-		accessLogMap["request_method"]    = c.Request.Method
-		accessLogMap["request_uri"]       = c.Request.RequestURI
-		accessLogMap["request_proto"]     = c.Request.Proto
-		accessLogMap["request_ua"]        = c.Request.UserAgent()
-		accessLogMap["request_referer"]   = c.Request.Referer()
+		accessLogMap["request_time"] = startTime
+		accessLogMap["request_method"] = c.Request.Method
+		accessLogMap["request_uri"] = c.Request.RequestURI
+		accessLogMap["request_proto"] = c.Request.Proto
+		accessLogMap["request_ua"] = c.Request.UserAgent()
+		accessLogMap["request_referer"] = c.Request.Referer()
 		accessLogMap["request_post_data"] = c.Request.PostForm.Encode()
 		accessLogMap["request_client_ip"] = c.ClientIP()
 
 		accessLogMap["response_time"] = endTime
 		accessLogMap["response_code"] = responseCode
-		accessLogMap["response_msg"]  = responseMsg
+		accessLogMap["response_msg"] = responseMsg
 		accessLogMap["response_data"] = responseData
 
 		accessLogMap["cost_time"] = fmt.Sprintf("%vms", endTime-startTime)

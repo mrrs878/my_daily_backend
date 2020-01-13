@@ -1,4 +1,4 @@
-package response
+package util
 
 import (
 	"github.com/gin-gonic/gin"
@@ -10,9 +10,9 @@ type GinS struct {
 }
 
 type ResS struct {
-	Code int `json:"code"`
-	Message string `json:"msg"`
-	Data interface{} `json:"data"`
+	Code    int         `json:"code"`
+	Message string      `json:"msg"`
+	Data    interface{} `json:"data"`
 }
 
 func (g *GinS) Response(code int, msg string, data interface{}) {
