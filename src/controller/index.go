@@ -2,6 +2,7 @@ package controller
 
 import (
 	"demo_1/src/middleware"
+	"demo_1/src/repositories/email"
 	"demo_1/src/util"
 	"github.com/gin-gonic/gin"
 )
@@ -24,4 +25,10 @@ func SetupRouter(engine *gin.Engine) {
 	//{
 	//	ProductRouter.POST("/product", product)
 	//}
+
+	EmailRouter := engine.Group("/email")
+	{
+		EmailRouter.POST("/", email.Add)
+		EmailRouter.GET("/:id", email.Index)
+	}
 }

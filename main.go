@@ -4,7 +4,7 @@ import (
 	"context"
 	"demo_1/src/config"
 	"demo_1/src/controller"
-	"demo_1/src/util"
+	"demo_1/src/database"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -17,7 +17,7 @@ import (
 func main() {
 	gin.SetMode(config.AppMode)
 	engine := gin.New()
-	util.SetUpDatabase()
+	database.SetUpDatabase()
 	controller.SetupRouter(engine)
 	server := &http.Server{
 		Addr:         config.AppPort,
