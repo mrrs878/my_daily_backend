@@ -17,8 +17,10 @@ import (
 func main() {
 	gin.SetMode(config.AppMode)
 	engine := gin.New()
+
 	database.SetUpDatabase()
 	controller.SetupRouter(engine)
+
 	server := &http.Server{
 		Addr:         config.AppPort,
 		Handler:      engine,

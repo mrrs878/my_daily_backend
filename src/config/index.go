@@ -1,15 +1,5 @@
 package config
 
-var (
-	ApiAuthConfig = map[string]map[string]string{
-		"DEMO": {
-			"md5": "IgkibX71IEf382PT",
-			"aes": "IgkibX71IEf382PT",
-			"rsa": "rsa/public.pem",
-		},
-	}
-)
-
 const (
 	AppMode = "release" //debug or release
 	AppPort = ":9090"
@@ -24,12 +14,14 @@ const (
 
 	AppAccessLogName = "src/log/" + AppName + "-access.log"
 	AppErrorLogName  = "src/log/" + AppName + "-error.log"
-	AppGrpcLogName   = "src/log/" + AppName + "-grpc.log"
 
 	ErrorNotifyOpen = -1
 
-	DatabaseURl      = ""
-	DatabasePort     = ""
-	DatabaseUsername = ""
-	DatabasePassword = ""
+	DatabaseURl      = "localhost"
+	DatabasePort     = "3306"
+	DatabaseName     = "e_book"
+	DatabaseUsername = "root"
+	DatabasePassword = "admin888"
+
+	SignKey = "hello world"
 )

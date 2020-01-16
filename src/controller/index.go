@@ -3,6 +3,8 @@ package controller
 import (
 	"demo_1/src/middleware"
 	"demo_1/src/repositories/email"
+	"demo_1/src/service/auth"
+	"demo_1/src/service/user"
 	"demo_1/src/util"
 	"github.com/gin-gonic/gin"
 )
@@ -21,14 +23,25 @@ func SetupRouter(engine *gin.Engine) {
 		utilGin.Response(1, "pong", nil)
 	})
 
-	//ProductRouter := engine.Group("")
-	//{
-	//	ProductRouter.POST("/product", product)
-	//}
-
 	EmailRouter := engine.Group("/email")
+	EmailRouter.Use(middleware.JWTAuth())
 	{
 		EmailRouter.POST("/", email.Add)
+		EmailRouter.PUT("/", email.Update)
+		EmailRouter.GET("/", email.View)
 		EmailRouter.GET("/:id", email.Index)
+		EmailRouter.DELETE("/:id", email.Delete)
+	}
+
+	UserRouter := engine.Group("/user")
+	UserRouter.Use(middleware.JWTAuth())
+	{
+		UserRouter.GET("/", user.GetInfo)
+	}
+
+	AuthRouter := engine.Group("/auth")
+	{
+		AuthRouter.POST("/login", auth.Login)
+		AuthRouter.POST("/register", auth.Register)
 	}
 }
