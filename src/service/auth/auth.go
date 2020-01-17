@@ -1,24 +1,24 @@
 package auth
 
 import (
+	"demo_1/src/functions"
 	"demo_1/src/middleware"
 	"demo_1/src/model"
 	"demo_1/src/repositories/user"
-	"demo_1/src/security"
+	"demo_1/src/tool"
 	"demo_1/src/types"
-	"demo_1/src/util"
 	"github.com/gin-gonic/gin"
 )
 
 func Login(c *gin.Context) {
-	utilGin := util.GinS{Ctx: c}
+	utilGin := tool.GinS{Ctx: c}
 	loginForm := types.LoginForm{}
 	if err := c.BindJSON(&loginForm); err != nil {
 		utilGin.Response(-1, err.Error(), nil)
 		return
 	}
 
-	hash := security.MD5(loginForm.Password)
+	hash := functions.MD5(loginForm.Password)
 	_user := model.User{Name: loginForm.Name, PasswordHash: hash}
 	if err := user.Index(&_user); err != nil {
 		utilGin.Response(-1, err.Error(), nil)
@@ -40,7 +40,7 @@ func Login(c *gin.Context) {
 }
 
 func Register(c *gin.Context) {
-	utilGin := util.GinS{Ctx: c}
+	utilGin := tool.GinS{Ctx: c}
 	registerForm := types.RegisterForm{}
 	if err := c.BindJSON(&registerForm); err != nil {
 		utilGin.Response(-1, err.Error(), nil)
@@ -48,7 +48,7 @@ func Register(c *gin.Context) {
 	}
 
 	_user := model.User{}
-	_user.PasswordHash = security.MD5(registerForm.Password)
+	_user.PasswordHash = functions.MD5(registerForm.Password)
 	_user.Name = registerForm.Name
 	_, err := user.Add(&_user)
 	if err != nil {

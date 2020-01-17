@@ -3,12 +3,12 @@ package email
 import (
 	"demo_1/src/database"
 	"demo_1/src/model"
-	"demo_1/src/util"
+	"demo_1/src/tool"
 	"github.com/gin-gonic/gin"
 )
 
 func Add(c *gin.Context) {
-	utilGin := util.GinS{Ctx: c}
+	utilGin := tool.GinS{Ctx: c}
 
 	var email = model.Email{}
 	if err := c.BindJSON(&email); err != nil {
@@ -29,7 +29,7 @@ func Add(c *gin.Context) {
 }
 
 func Index(c *gin.Context) {
-	utilGin := util.GinS{Ctx: c}
+	utilGin := tool.GinS{Ctx: c}
 	result := database.DB.Where(c.Param("id")).First(&model.Email{})
 	if result.Error != nil {
 		utilGin.Response(-1, result.Error.Error(), nil)
@@ -39,7 +39,7 @@ func Index(c *gin.Context) {
 }
 
 func View(c *gin.Context) {
-	utilGin := util.GinS{Ctx: c}
+	utilGin := tool.GinS{Ctx: c}
 	result := database.DB.Where("user_id = ?", c.Param("user")).Find(&[]model.Email{})
 	if result.Error != nil {
 		utilGin.Response(1, result.Error.Error(), nil)
@@ -49,7 +49,7 @@ func View(c *gin.Context) {
 }
 
 func Delete(c *gin.Context) {
-	utilGin := util.GinS{Ctx: c}
+	utilGin := tool.GinS{Ctx: c}
 	var email = model.Email{}
 	result := database.DB.Where(c.Param("id")).Find(&email).Delete(c.Param("id"))
 	if result.Error != nil {
@@ -60,7 +60,7 @@ func Delete(c *gin.Context) {
 }
 
 func Update(c *gin.Context) {
-	utilGin := util.GinS{Ctx: c}
+	utilGin := tool.GinS{Ctx: c}
 	var email = model.Email{}
 	if err := c.BindJSON(&email); err != nil {
 		utilGin.Response(-1, err.Error(), nil)

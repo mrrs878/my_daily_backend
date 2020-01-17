@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"demo_1/src/util"
+	"demo_1/src/tool"
 	"github.com/gin-gonic/gin"
 	"runtime/debug"
 	"strings"
@@ -16,7 +16,7 @@ func SetUpException() gin.HandlerFunc {
 					DebugStack += v + "<br>"
 				}
 
-				utilGin := util.GinS{Ctx: c}
+				utilGin := tool.GinS{Ctx: c}
 				utilGin.Response(500, "系统异常，请联系管理员！", nil)
 			}
 		}()

@@ -7,21 +7,18 @@ import (
 
 func Add(user *model.User) (interface{}, error) {
 	result := database.DB.Create(&user)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-	return result.Value, nil
+	return result.Value, result.Error
 }
 
 func Index(user *model.User) error {
 	result := database.DB.Where(&user).Find(&user)
-	database.DB.Model(&user).Related(&user.Emails)
-	if result.Error != nil {
-		return result.Error
-	}
-	return nil
+	//database.DB.Model(&user).Related(&user.Emails)
+	return result.Error
 }
 
 func View() {}
 
-func Delete() {}
+func Delete(user *model.User) error {
+	result := database.DB.Delete(&user)
+	return result.Error
+}

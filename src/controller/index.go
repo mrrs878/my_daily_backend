@@ -5,7 +5,7 @@ import (
 	"demo_1/src/repositories/email"
 	"demo_1/src/service/auth"
 	"demo_1/src/service/user"
-	"demo_1/src/util"
+	"demo_1/src/tool"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,12 +14,12 @@ func SetupRouter(engine *gin.Engine) {
 
 	engine.Static("assets", "./assets")
 	engine.NoRoute(func(c *gin.Context) {
-		utilGin := util.GinS{Ctx: c}
+		utilGin := tool.GinS{Ctx: c}
 		utilGin.Response(404, "请求方法不存在", nil)
 	})
 
 	engine.GET("/ping", func(context *gin.Context) {
-		utilGin := util.GinS{Ctx: context}
+		utilGin := tool.GinS{Ctx: context}
 		utilGin.Response(1, "pong", nil)
 	})
 
@@ -37,6 +37,7 @@ func SetupRouter(engine *gin.Engine) {
 	UserRouter.Use(middleware.JWTAuth())
 	{
 		UserRouter.GET("/", user.GetInfo)
+		UserRouter.DELETE("/:id", user.WriteOff)
 	}
 
 	AuthRouter := engine.Group("/auth")

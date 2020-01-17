@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"demo_1/src/config"
-	"demo_1/src/util"
+	"demo_1/src/tool"
 	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -29,7 +29,7 @@ var (
 
 func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		utilGin := util.GinS{Ctx: c}
+		utilGin := tool.GinS{Ctx: c}
 		token := c.Request.Header.Get("Authorization")
 		if token == "" {
 			utilGin.Response(403, "请求未携带token，无权限访问", nil)

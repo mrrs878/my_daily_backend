@@ -2,23 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f88b8b64-9e51-4952-a74c-4e41bf22a8be" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/img/scrollBg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/log/go-gin-api-access.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/log/go-gin-api-error.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/log/go-gin-api-grpc.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/util/database.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/functions/tool.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config/index.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/index.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controller/index.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/index.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/log/go-gin-api-access.log" beforeDir="false" afterPath="$PROJECT_DIR$/src/log/go-gin-api-access.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middleware/auth.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/middleware/auth.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/middleware/exception.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/middleware/exception.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/middleware/logger.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/middleware/logger.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/util/resonpse.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/response.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repositories/email/email.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/repositories/email/email.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repositories/user/index.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/repositories/user/index.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/security/index.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/service/auth/auth.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/auth/auth.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/service/user/index.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/user/index.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/response.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/tool/response.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,8 +24,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Go File" />
         <option value="Go Application" />
+        <option value="Go File" />
       </list>
     </option>
   </component>
@@ -51,7 +47,8 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
-    <property name="DefaultGoTemplateProperty" value="Go Application" />
+    <property name="DefaultGoTemplateProperty" value="Go File" />
+    <property name="GO_FMT" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -61,15 +58,16 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.vendoring.notification.had.been.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/assets/img" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Data\goPath\src\demo_1" />
+      <recent name="D:\Data\goPath\src\demo_1\src\functions" />
       <recent name="D:\Data\goPath\src\demo_1\src\util" />
-      <recent name="D:\Data\goPath\src\demo_1\src\middleware" />
-      <recent name="D:\Data\goPath\src\demo_1\src\util\response" />
-      <recent name="D:\Data\goPath\src\demo_1\src\middleware\logger" />
+      <recent name="D:\Data\goPath\src\demo_1\src\util\tool" />
+      <recent name="D:\Data\goPath\src\demo_1\src\controller" />
+      <recent name="D:\Data\goPath\src\demo_1\src\service\user" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Data\goPath\src\demo_1\src\assets\img" />
@@ -114,33 +112,72 @@
     <proxy>https://goproxy.io</proxy>
   </component>
   <component name="WindowStateProjectService">
-    <state x="-1552" y="0" key="CommitChangelistDialog2" timestamp="1578917718733">
+    <state x="-1552" y="0" key="CommitChangelistDialog2" timestamp="1579177644847">
       <screen x="-1920" y="0" width="1536" height="864" />
     </state>
-    <state x="-1552" y="0" key="CommitChangelistDialog2/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1578917718733" />
+    <state x="-1552" y="0" key="CommitChangelistDialog2/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1579177644847" />
+    <state width="763" height="618" key="DebuggerActiveHint" timestamp="1579172549274">
+      <screen x="-1920" y="0" width="1536" height="864" />
+    </state>
+    <state width="763" height="618" key="DebuggerActiveHint/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1579172549274" />
     <state x="-1371" y="189" key="FileChooserDialogImpl" timestamp="1578822131432">
       <screen x="-1920" y="0" width="1536" height="864" />
     </state>
     <state x="-1371" y="189" key="FileChooserDialogImpl/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1578822131432" />
-    <state width="1495" height="204" key="GridCell.Tab.0.bottom" timestamp="1578916770079">
+    <state width="547" height="705" key="GridCell.Tab.0.bottom" timestamp="1579238518605">
       <screen x="-1920" y="0" width="1536" height="864" />
     </state>
-    <state width="1495" height="204" key="GridCell.Tab.0.bottom/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1578916770079" />
-    <state width="1495" height="204" key="GridCell.Tab.0.center" timestamp="1578916770079">
+    <state width="547" height="705" key="GridCell.Tab.0.bottom/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1579238518605" />
+    <state width="547" height="705" key="GridCell.Tab.0.center" timestamp="1579238518605">
       <screen x="-1920" y="0" width="1536" height="864" />
     </state>
-    <state width="1495" height="204" key="GridCell.Tab.0.center/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1578916770079" />
-    <state width="1495" height="204" key="GridCell.Tab.0.left" timestamp="1578916770079">
+    <state width="547" height="705" key="GridCell.Tab.0.center/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1579238518605" />
+    <state width="547" height="705" key="GridCell.Tab.0.left" timestamp="1579238518604">
       <screen x="-1920" y="0" width="1536" height="864" />
     </state>
-    <state width="1495" height="204" key="GridCell.Tab.0.left/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1578916770079" />
-    <state width="1495" height="204" key="GridCell.Tab.0.right" timestamp="1578916770079">
+    <state width="547" height="705" key="GridCell.Tab.0.left/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1579238518604" />
+    <state width="547" height="705" key="GridCell.Tab.0.right" timestamp="1579238518605">
       <screen x="-1920" y="0" width="1536" height="864" />
     </state>
-    <state width="1495" height="204" key="GridCell.Tab.0.right/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1578916770079" />
+    <state width="547" height="705" key="GridCell.Tab.0.right/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1579238518605" />
+    <state width="547" height="705" key="GridCell.Tab.1.bottom" timestamp="1579238518605">
+      <screen x="-1920" y="0" width="1536" height="864" />
+    </state>
+    <state width="547" height="705" key="GridCell.Tab.1.bottom/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1579238518605" />
+    <state width="547" height="705" key="GridCell.Tab.1.center" timestamp="1579238518605">
+      <screen x="-1920" y="0" width="1536" height="864" />
+    </state>
+    <state width="547" height="705" key="GridCell.Tab.1.center/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1579238518605" />
+    <state width="547" height="705" key="GridCell.Tab.1.left" timestamp="1579238518605">
+      <screen x="-1920" y="0" width="1536" height="864" />
+    </state>
+    <state width="547" height="705" key="GridCell.Tab.1.left/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1579238518605" />
+    <state width="547" height="705" key="GridCell.Tab.1.right" timestamp="1579238518605">
+      <screen x="-1920" y="0" width="1536" height="864" />
+    </state>
+    <state width="547" height="705" key="GridCell.Tab.1.right/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1579238518605" />
+    <state x="-1571" y="169" key="IDE.errors.dialog" timestamp="1578917823854">
+      <screen x="-1920" y="0" width="1536" height="864" />
+    </state>
+    <state x="-1571" y="169" key="IDE.errors.dialog/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1578917823854" />
     <state x="-1662" y="134" width="1139" height="707" key="SettingsEditor" timestamp="1578914787010">
       <screen x="-1920" y="0" width="1536" height="864" />
     </state>
     <state x="-1662" y="134" width="1139" height="707" key="SettingsEditor/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1578914787010" />
+    <state x="-1559" y="163" key="Vcs.Push.Dialog.v2" timestamp="1579177647204">
+      <screen x="-1920" y="0" width="1536" height="864" />
+    </state>
+    <state x="-1559" y="163" key="Vcs.Push.Dialog.v2/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1579177647204" />
+    <state x="-1446" y="208" key="git4idea.merge.GitPullDialog" timestamp="1579051774454">
+      <screen x="-1920" y="0" width="1536" height="864" />
+    </state>
+    <state x="-1446" y="208" key="git4idea.merge.GitPullDialog/0.0.1536.824/-1920.0.1536.864@-1920.0.1536.864" timestamp="1579051774454" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="DlvErrorBreakpoint" />
+      </default-breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
