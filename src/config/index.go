@@ -1,5 +1,10 @@
 package config
 
+import (
+	"demo_1/src/constant"
+	"time"
+)
+
 const (
 	AppMode = "release" //debug or release
 	AppPort = ":9090"
@@ -15,7 +20,7 @@ const (
 	AppAccessLogName = "src/log/" + AppName + "-access.log"
 	AppErrorLogName  = "src/log/" + AppName + "-error.log"
 
-	ErrorNotifyOpen = -1
+	ErrorLevel = constant.INFO
 
 	DatabaseURl      = "localhost"
 	DatabasePort     = "3306"
@@ -23,5 +28,8 @@ const (
 	DatabaseUsername = "root"
 	DatabasePassword = "admin888"
 
-	SignKey = "hello world"
+	TokenSignKey    = "hello world"
+	TokenExpireTime = 200 * time.Minute
+
+	QueryPageSize = 20
 )

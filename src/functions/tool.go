@@ -16,17 +16,16 @@ func MD5(str string) string {
 	return hex.EncodeToString(s.Sum(nil))
 }
 
-func GetUserIDFormContext(c *gin.Context, id *uint) error {
+func GetUserIDFormContext(c *gin.Context) (uint, error) {
 	value, exists := c.Get("claims")
 	if !exists {
-		return errors.New("token失效")
+		return 0, errors.New("token失效")
 	}
 	result, ok := (value).(*middleware.CustomClaims)
 	if !ok {
-		return errors.New("token失效")
+		return 0, errors.New("token失效")
 	}
-	*id = result.ID
-	return nil
+	return result.ID, nil
 }
 
 func GetUserInfoFromContext(c *gin.Context, _user *model.User) error {

@@ -28,8 +28,8 @@ func main() {
 		WriteTimeout: config.AppWriteTimeout * time.Second,
 	}
 
-	fmt.Println("|  Go Http Server Start Successful  |")
-	fmt.Println("|    Port" + config.AppPort + "     Pid:" + fmt.Sprintf("%d", os.Getpid()) + "        |")
+	log.Println("|  Go Http Server Start Successful  |")
+	log.Println("|    Port" + config.AppPort + "     Pid:" + fmt.Sprintf("%d", os.Getpid()) + "        |")
 
 	go func() {
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {

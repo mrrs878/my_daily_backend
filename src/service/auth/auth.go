@@ -1,36 +1,45 @@
 package auth
 
 import (
+	"demo_1/src/config"
+	"demo_1/src/constant"
 	"demo_1/src/functions"
 	"demo_1/src/middleware"
 	"demo_1/src/model"
 	"demo_1/src/repositories/user"
-	"demo_1/src/tool"
 	"demo_1/src/types"
+	"demo_1/src/util"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"time"
 )
 
 func Login(c *gin.Context) {
-	utilGin := tool.GinS{Ctx: c}
+	utilGin := util.GinS{Ctx: c}
 	loginForm := types.LoginForm{}
 	if err := c.BindJSON(&loginForm); err != nil {
-		utilGin.Response(-1, err.Error(), nil)
+		utilGin.Response(constant.FAILED, err.Error(), nil)
 		return
 	}
 
 	hash := functions.MD5(loginForm.Password)
 	_user := model.User{Name: loginForm.Name, PasswordHash: hash}
 	if err := user.Index(&_user); err != nil {
-		utilGin.Response(-1, err.Error(), nil)
-	}
-
-	token, err := middleware.NewJWT().CreateToken(middleware.CustomClaims{ID: _user.ID, Name: _user.Name})
-	if err != nil {
-		utilGin.Response(-1, err.Error(), nil)
+		utilGin.Response(constant.FAILED, err.Error(), nil)
 		return
 	}
 
-	utilGin.Response(0, "登录成功", types.UserInfoForm{
+	token, err := middleware.NewJWT().CreateToken(middleware.CustomClaims{
+		ID:             _user.ID,
+		Name:           _user.Name,
+		StandardClaims: jwt.StandardClaims{ExpiresAt: time.Now().Add(config.TokenExpireTime).Unix()},
+	})
+	if err != nil {
+		utilGin.Response(constant.FAILED, err.Error(), nil)
+		return
+	}
+
+	utilGin.Response(constant.SUCCESS, "登录成功", types.UserInfoForm{
 		Model:  _user.Model,
 		Name:   _user.Name,
 		Emails: _user.Emails,
@@ -40,10 +49,10 @@ func Login(c *gin.Context) {
 }
 
 func Register(c *gin.Context) {
-	utilGin := tool.GinS{Ctx: c}
+	utilGin := util.GinS{Ctx: c}
 	registerForm := types.RegisterForm{}
 	if err := c.BindJSON(&registerForm); err != nil {
-		utilGin.Response(-1, err.Error(), nil)
+		utilGin.Response(constant.FAILED, err.Error(), nil)
 		return
 	}
 
@@ -52,8 +61,8 @@ func Register(c *gin.Context) {
 	_user.Name = registerForm.Name
 	_, err := user.Add(&_user)
 	if err != nil {
-		utilGin.Response(-1, err.Error(), nil)
+		utilGin.Response(constant.FAILED, err.Error(), nil)
 		return
 	}
-	utilGin.Response(0, "注册成功", nil)
+	utilGin.Response(constant.SUCCESS, "注册成功", nil)
 }

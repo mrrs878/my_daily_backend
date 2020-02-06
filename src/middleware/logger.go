@@ -3,7 +3,8 @@ package middleware
 import (
 	"bytes"
 	"demo_1/src/config"
-	"demo_1/src/tool"
+	"demo_1/src/constant"
+	"demo_1/src/util"
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -38,12 +39,12 @@ func SetupLogger() gin.HandlerFunc {
 
 		responseBody := bodyLogWriter.body.String()
 
-		var responseCode int
+		var responseCode constant.ResultCode
 		var responseMsg string
 		var responseData interface{}
 
 		if responseBody != "" {
-			res := tool.ResS{}
+			res := util.ResS{}
 			err := json.Unmarshal([]byte(responseBody), &res)
 			if err != nil {
 				responseCode = res.Code

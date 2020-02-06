@@ -5,6 +5,7 @@ import (
 	"demo_1/src/model"
 	"fmt"
 	"github.com/jinzhu/gorm"
+	"log"
 )
 import _ "github.com/jinzhu/gorm/dialects/mysql"
 
@@ -28,9 +29,14 @@ func SetUpDatabase() {
 	db.DB().SetMaxOpenConns(100)
 	db.Set("gorm:table_options", "charset=utf8mb4").
 		AutoMigrate(&model.Email{}).
+		AutoMigrate(&model.Goods{}).
+		AutoMigrate(&model.GoodsSub{}).
+		AutoMigrate(&model.GoodsCarousel{}).
+		AutoMigrate(&model.GoodsContent{}).
+		AutoMigrate(&model.DataDict{}).
 		AutoMigrate(&model.User{})
 
 	DB = db
-	fmt.Println("|    connected to database        |")
+	log.Println("|    connected to database        |")
 	//defer db.Close()
 }
