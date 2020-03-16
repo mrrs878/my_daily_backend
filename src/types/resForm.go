@@ -7,8 +7,8 @@ import (
 
 type UserInfoForm struct {
 	gorm.Model
-	Name   string        `json:"name"`
-	Emails []model.Email `json:"emails"`
-	Role   uint          `json:"role"`
-	Token  string        `json:"token"`
+	Name  string       `json:"name"`
+	Tasks []model.Task `json:"emails"`
+	Role  uint         `json:"role"`
+	Token string       `json:"token"`
 }

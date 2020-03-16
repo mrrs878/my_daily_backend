@@ -28,13 +28,8 @@ func SetUpDatabase() {
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
 	db.Set("gorm:table_options", "charset=utf8mb4").
-		AutoMigrate(&model.Email{}).
-		AutoMigrate(&model.Goods{}).
-		AutoMigrate(&model.GoodsSub{}).
-		AutoMigrate(&model.GoodsCarousel{}).
-		AutoMigrate(&model.GoodsContent{}).
-		AutoMigrate(&model.DataDict{}).
-		AutoMigrate(&model.User{})
+		AutoMigrate(&model.User{}).
+		AutoMigrate(&model.Task{})
 
 	DB = db
 	log.Println("|    connected to database        |")

@@ -4,6 +4,7 @@ import (
 	"demo_1/src/constant"
 	"demo_1/src/middleware"
 	"demo_1/src/repositories/email"
+	"demo_1/src/repositories/task"
 	"demo_1/src/service/auth"
 	"demo_1/src/service/dataDict"
 	"demo_1/src/service/goods"
@@ -13,7 +14,7 @@ import (
 )
 
 func SetupRouter(engine *gin.Engine) {
-	engine.Use(middleware.SetupLogger(), middleware.SetUpException())
+	engine.Use(middleware.SetUpCors(), middleware.SetupLogger(), middleware.SetUpException())
 
 	engine.Static("assets", "./assets")
 	engine.NoRoute(func(c *gin.Context) {
@@ -34,6 +35,14 @@ func SetupRouter(engine *gin.Engine) {
 		EmailRouter.GET("/", email.View)
 		EmailRouter.GET("/:id", email.Index)
 		EmailRouter.DELETE("/:id", email.Delete)
+	}
+
+	TaskRouter := engine.Group("/task")
+	TaskRouter.Use(middleware.JWTAuth())
+	{
+		TaskRouter.POST("", task.Add)
+		TaskRouter.GET("", task.View)
+		TaskRouter.GET("/:id", task.Index)
 	}
 
 	UserRouter := engine.Group("/user")

@@ -22,11 +22,11 @@ const (
 
 	ErrorLevel = constant.INFO
 
-	DatabaseURl      = "localhost"
+	DatabaseURl      = "118.190.140.52"
 	DatabasePort     = "3306"
-	DatabaseName     = "e_book"
+	DatabaseName     = "my_daily"
 	DatabaseUsername = "root"
-	DatabasePassword = "admin888"
+	DatabasePassword = "admin888_remote"
 
 	TokenSignKey    = "hello world"
 	TokenExpireTime = 200 * time.Minute

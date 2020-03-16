@@ -19,11 +19,11 @@ func GetInfo(c *gin.Context) {
 		utilGin.Response(constant.FAILED, err.Error(), nil)
 	}
 	utilGin.Response(constant.SUCCESS, "获取成功", types.UserInfoForm{
-		Model:  _user.Model,
-		Name:   _user.Name,
-		Emails: _user.Emails,
-		Role:   _user.Role,
-		Token:  c.Request.Header.Get("Authorization"),
+		Model: _user.Model,
+		Name:  _user.Name,
+		Tasks: _user.Tasks,
+		Role:  _user.Role,
+		Token: c.Request.Header.Get("Authorization"),
 	})
 }
 

@@ -40,11 +40,11 @@ func Login(c *gin.Context) {
 	}
 
 	utilGin.Response(constant.SUCCESS, "登录成功", types.UserInfoForm{
-		Model:  _user.Model,
-		Name:   _user.Name,
-		Emails: _user.Emails,
-		Role:   _user.Role,
-		Token:  token,
+		Model: _user.Model,
+		Name:  _user.Name,
+		Tasks: _user.Tasks,
+		Role:  _user.Role,
+		Token: token,
 	})
 }
 
