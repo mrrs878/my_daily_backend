@@ -3,7 +3,6 @@ package controller
 import (
 	"demo_1/src/constant"
 	"demo_1/src/middleware"
-	"demo_1/src/repositories/email"
 	"demo_1/src/repositories/task"
 	"demo_1/src/service/auth"
 	"demo_1/src/service/dataDict"
@@ -27,22 +26,14 @@ func SetupRouter(engine *gin.Engine) {
 		utilGin.Response(constant.SUCCESS, "pong", nil)
 	})
 
-	EmailRouter := engine.Group("/email")
-	EmailRouter.Use(middleware.JWTAuth())
-	{
-		EmailRouter.POST("/", email.Add)
-		EmailRouter.PUT("/", email.Update)
-		EmailRouter.GET("/", email.View)
-		EmailRouter.GET("/:id", email.Index)
-		EmailRouter.DELETE("/:id", email.Delete)
-	}
-
 	TaskRouter := engine.Group("/task")
 	TaskRouter.Use(middleware.JWTAuth())
 	{
 		TaskRouter.POST("", task.Add)
+		TaskRouter.PUT("", task.Update)
 		TaskRouter.GET("", task.View)
 		TaskRouter.GET("/:id", task.Index)
+		TaskRouter.DELETE("/:id", task.Delete)
 	}
 
 	UserRouter := engine.Group("/user")

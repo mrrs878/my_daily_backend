@@ -32,3 +32,11 @@ type UpdateGoodForm struct {
 	CreateGoodsForm
 	Id uint `binding:"required"`
 }
+
+type CreateTaskForm struct {
+	Title  string `binding:"required"`
+	Label  string `binding:"required"`
+	Detail string `binding:"required"`
+	Status uint   `binding:"required"`
+	UserId uint   `binding:"required"`
+}
