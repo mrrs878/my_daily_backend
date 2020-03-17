@@ -2,4 +2,6 @@ src/log
 
 *.exe
 
+.idea
+
 vendor

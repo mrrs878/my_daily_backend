@@ -20,5 +20,5 @@ type TaskInfoForm struct {
 	Detail    string `json:"detail"`
 	UserId    uint   `json:"userId"`
 	AlarmTime uint64 `json:"alarmTime"`
-	Status    uint   `json:"status"`
+	Status    int    `json:"status"`
 }

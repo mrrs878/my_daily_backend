@@ -9,6 +9,7 @@ import (
 	"demo_1/src/types"
 	"demo_1/src/util"
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
 func CreateTask(c *gin.Context) {
@@ -16,6 +17,7 @@ func CreateTask(c *gin.Context) {
 	createForm := types.CreateTaskForm{}
 	if err := c.BindJSON(&createForm); err != nil {
 		utilGin.Response(constant.FAILED, err.Error(), nil)
+		log.Println(createForm.Status)
 		return
 	}
 
@@ -28,6 +30,8 @@ func CreateTask(c *gin.Context) {
 		Title:  createForm.Title,
 		Label:  createForm.Label,
 		Detail: createForm.Detail,
+		Status: createForm.Status,
+		UserId: userId,
 		BaseModel: model.BaseModel{
 			CreateId: userId,
 		},

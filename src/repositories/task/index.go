@@ -16,7 +16,7 @@ func Del(task *model.Task) error {
 }
 
 func Update(task *model.Task) error {
-	result := database.DB.Update(&task)
+	result := database.DB.Model(task).Update(task).Find(task)
 	return result.Error
 }
 
