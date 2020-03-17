@@ -3,10 +3,10 @@ package controller
 import (
 	"demo_1/src/constant"
 	"demo_1/src/middleware"
-	"demo_1/src/repositories/task"
 	"demo_1/src/service/auth"
 	"demo_1/src/service/dataDict"
 	"demo_1/src/service/goods"
+	"demo_1/src/service/task"
 	"demo_1/src/service/user"
 	"demo_1/src/util"
 	"github.com/gin-gonic/gin"
@@ -29,10 +29,10 @@ func SetupRouter(engine *gin.Engine) {
 	TaskRouter := engine.Group("/task")
 	TaskRouter.Use(middleware.JWTAuth())
 	{
-		TaskRouter.POST("", task.Add)
+		TaskRouter.POST("", task.CreateTask)
 		TaskRouter.PUT("", task.Update)
-		TaskRouter.GET("", task.View)
-		TaskRouter.GET("/:id", task.Index)
+		TaskRouter.GET("", task.ViewByUser)
+		TaskRouter.GET("/:id", task.GetInfo)
 		TaskRouter.DELETE("/:id", task.Delete)
 	}
 

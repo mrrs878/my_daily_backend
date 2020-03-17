@@ -12,3 +12,13 @@ type UserInfoForm struct {
 	Role  uint         `json:"role"`
 	Token string       `json:"token"`
 }
+
+type TaskInfoForm struct {
+	gorm.Model
+	Title     string `json:"title"`
+	Label     string `json:"title"`
+	Detail    string `json:"detail"`
+	UserId    uint   `json:"userId"`
+	AlarmTime uint64 `json:"alarmTime"`
+	Status    uint   `json:"status"`
+}

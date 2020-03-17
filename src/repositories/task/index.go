@@ -30,7 +30,7 @@ func View(task *[]model.Task) error {
 	return result.Error
 }
 
-func ViewWithCondition(condition *model.Task, tasks *[]model.Task) error {
-	result := database.DB.Where(condition).Find(tasks)
+func ViewWithCondition(tasks *[]model.Task, condition interface{}, args ...interface{}) error {
+	result := database.DB.Where(condition, args).Find(tasks)
 	return result.Error
 }
