@@ -9,15 +9,13 @@ import (
 	"demo_1/src/types"
 	"demo_1/src/util"
 	"github.com/gin-gonic/gin"
-	"log"
 )
 
 func CreateTask(c *gin.Context) {
 	utilGin := util.GinS{Ctx: c}
 	createForm := types.CreateTaskForm{}
-	if err := c.BindJSON(&createForm); err != nil {
+	if err := c.ShouldBindJSON(&createForm); err != nil {
 		utilGin.Response(constant.FAILED, err.Error(), nil)
-		log.Println(createForm.Status)
 		return
 	}
 

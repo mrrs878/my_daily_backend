@@ -34,11 +34,11 @@ type UpdateGoodForm struct {
 }
 
 type CreateTaskForm struct {
-	Title     string `binding:"required" json:"title"`
-	Label     string `binding:"required" json:"label"`
-	Detail    string `binding:"required" json:"detail"`
-	Status    int    `binding:"required" json:"status"`
-	AlarmTime uint64 `binding:"required" json:"alarmTime"`
+	Title     string `json:"title" binding:"required"`
+	Label     string `json:"label"`
+	Detail    string `json:"detail" binding:"required"`
+	AlarmTime uint64 `json:"alarmTime" binding:"required"`
+	Status    int    `json:"status"`
 }
 
 type UpdateTaskForm struct {
