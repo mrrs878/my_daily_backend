@@ -26,6 +26,14 @@ func SetupRouter(engine *gin.Engine) {
 		utilGin.Response(constant.SUCCESS, "pong", nil)
 	})
 
+	UserRouter := engine.Group("/user")
+	UserRouter.Use(middleware.JWTAuth())
+	{
+		UserRouter.GET("", user.GetInfo)
+		UserRouter.DELETE("", user.WriteOffSelf)
+		UserRouter.DELETE("/:id", user.WriteOff)
+	}
+
 	TaskRouter := engine.Group("/task")
 	TaskRouter.Use(middleware.JWTAuth())
 	{
@@ -34,14 +42,6 @@ func SetupRouter(engine *gin.Engine) {
 		TaskRouter.GET("", task.ViewByUser)
 		TaskRouter.GET("/:id", task.GetInfo)
 		TaskRouter.DELETE("/:id", task.Delete)
-	}
-
-	UserRouter := engine.Group("/user")
-	UserRouter.Use(middleware.JWTAuth())
-	{
-		UserRouter.GET("/", user.GetInfo)
-		UserRouter.DELETE("/", user.WriteOffSelf)
-		UserRouter.DELETE("/:id", user.WriteOff)
 	}
 
 	AuthRouter := engine.Group("/auth")
