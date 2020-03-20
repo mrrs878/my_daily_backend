@@ -6,6 +6,7 @@ import (
 	"demo_1/src/service/auth"
 	"demo_1/src/service/dataDict"
 	"demo_1/src/service/goods"
+	"demo_1/src/service/sw"
 	"demo_1/src/service/task"
 	"demo_1/src/service/user"
 	"demo_1/src/util"
@@ -48,6 +49,12 @@ func SetupRouter(engine *gin.Engine) {
 	{
 		AuthRouter.POST("/login", auth.Login)
 		AuthRouter.POST("/register", auth.Register)
+	}
+
+	SubscriptionRouter := engine.Group("/sw")
+	{
+		SubscriptionRouter.POST("/sub", sw.Subscribable)
+		SubscriptionRouter.POST("/push", sw.PushMessage)
 	}
 
 	GoodsRouter := engine.Group("/goods")
