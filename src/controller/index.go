@@ -52,6 +52,7 @@ func SetupRouter(engine *gin.Engine) {
 	}
 
 	SubscriptionRouter := engine.Group("/sw")
+	SubscriptionRouter.Use(middleware.JWTAuth())
 	{
 		SubscriptionRouter.POST("/sub", sw.Subscribable)
 		SubscriptionRouter.POST("/push", sw.PushMessage)

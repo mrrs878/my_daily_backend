@@ -48,3 +48,15 @@ type UpdateTaskForm struct {
 	Status    int    `json:"status"`
 	AlarmTime uint64 `json:"alarmTime"`
 }
+
+type SubscriptionForm struct {
+	Endpoint             string `binding:"required" json:"endpoint"`
+	ExpirationTime       uint   `json:"expirationTime"`
+	ApplicationServerKey string `binding:"required" json:"p256dh"`
+	Auth                 string `binding:"required" json:"auth"`
+}
+
+type PushMsgForm struct {
+	Detail string `binding:"required" json:"detail"`
+	UserId uint   `binding:"required" json:"userId"`
+}

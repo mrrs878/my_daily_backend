@@ -29,8 +29,8 @@ func SetUpDatabase() {
 	db.DB().SetMaxOpenConns(100)
 	db.Set("gorm:table_options", "charset=utf8mb4").
 		AutoMigrate(&model.User{}).
-		AutoMigrate(&model.Task{})
-
+		AutoMigrate(&model.Task{}).
+		AutoMigrate(&model.Subscription{})
 	DB = db
 	log.Println("|    connected to database        |")
 	//defer db.Close()
