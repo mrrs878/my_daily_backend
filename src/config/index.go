@@ -29,7 +29,7 @@ const (
 	DatabasePassword = "admin888_remote"
 
 	TokenSignKey    = "hello world"
-	TokenExpireTime = 200 * time.Minute
+	TokenExpireTime = 2400 * time.Hour
 
 	QueryPageSize = 20
 )
