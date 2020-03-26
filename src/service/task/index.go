@@ -25,11 +25,12 @@ func CreateTask(c *gin.Context) {
 		return
 	}
 	_task := model.Task{
-		Title:  createForm.Title,
-		Label:  createForm.Label,
-		Detail: createForm.Detail,
-		Status: createForm.Status,
-		UserId: userId,
+		Title:     createForm.Title,
+		Label:     createForm.Label,
+		Detail:    createForm.Detail,
+		Status:    createForm.Status,
+		AlarmTime: createForm.AlarmTime,
+		UserId:    userId,
 		BaseModel: model.BaseModel{
 			CreateId: userId,
 		},
