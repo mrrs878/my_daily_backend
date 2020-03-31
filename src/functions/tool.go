@@ -8,6 +8,8 @@ import (
 	"encoding/hex"
 	"errors"
 	"github.com/gin-gonic/gin"
+	"log"
+	"strings"
 )
 
 func MD5(str string) string {
@@ -17,29 +19,28 @@ func MD5(str string) string {
 }
 
 func GetUserIDFormContext(c *gin.Context) (uint, error) {
-	value, exists := c.Get("claims")
-	if !exists {
-		return 0, errors.New("token失效")
+	tokenTmp := strings.Split(c.Request.Header.Get("Authorization"), " ")
+	if len(tokenTmp) != 2 {
+		return 0, errors.New("请求未携带token")
 	}
-	result, ok := (value).(*middleware.CustomClaims)
-	if !ok {
-		return 0, errors.New("token失效")
+	token := tokenTmp[1]
+	log.Print("get token: ", token)
+
+	j := middleware.NewJWT()
+	claims, err := j.ParseToken(token)
+	if err != nil {
+		return 0, err
 	}
-	return result.ID, nil
+	return claims.ID, nil
 }
 
-func GetUserInfoFromContext(c *gin.Context, _user *model.User) error {
-	value, exists := c.Get("claims")
-	if !exists {
-		return errors.New("token失效")
+func GetUserInfoFromContext(c *gin.Context) (*model.User, error) {
+	id, err := GetUserIDFormContext(c)
+	if err != nil {
+		return nil, err
 	}
-	result, ok := (value).(*middleware.CustomClaims)
-	if !ok {
-		return errors.New("token失效")
-	}
-	_user.ID = result.ID
-	if err := user.Index(_user); err != nil {
-		return err
-	}
-	return nil
+	_user := model.User{}
+	_user.ID = id
+	err = user.Index(&_user)
+	return &_user, err
 }

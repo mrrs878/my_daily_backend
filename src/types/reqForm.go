@@ -60,3 +60,12 @@ type PushMsgForm struct {
 	Detail string `binding:"required" json:"detail"`
 	UserId uint   `binding:"required" json:"userId"`
 }
+
+type CreateHabitForm struct {
+	Title     string `json:"title" binding:"required"`
+	Label     string `json:"label"`
+	Detail    string `json:"detail" binding:"required"`
+	Status    int    `json:"status"`
+	AlarmTime string `json:"alarmTime" binding:"required"`
+	AlarmDate string `json:"alarmDate" binding:"required"`
+}

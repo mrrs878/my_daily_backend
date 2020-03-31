@@ -14,9 +14,10 @@ import (
 func GetInfo(c *gin.Context) {
 	utilGin := util.GinS{Ctx: c}
 
-	_user := model.User{}
-	if err := functions.GetUserInfoFromContext(c, &_user); err != nil {
+	_user, err := functions.GetUserInfoFromContext(c)
+	if err != nil {
 		utilGin.Response(constant.FAILED, err.Error(), nil)
+		return
 	}
 	utilGin.Response(constant.SUCCESS, "获取成功", types.UserInfoForm{
 		Model: _user.Model,

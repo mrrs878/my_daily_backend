@@ -12,5 +12,5 @@ type Task struct {
 	Detail    string `gorm:"type:varchar(256)" validate:"required" json:"detail"`
 	Status    int    `gorm:"type:int(3)" validate:"required" json:"status"`
 	AlarmTime uint64 `gorm:"type:bigint" validate:"required" json:"alarmTime"`
-	UserId    uint   `gorm:"type:bigint" validate:"required" json:"userId"`
+	UserId    uint   `gorm:"type:bigint; index" validate:"required" json:"userId"`
 }

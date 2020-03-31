@@ -11,11 +11,16 @@ func Add(user *model.User) (interface{}, error) {
 }
 
 func Index(user *model.User) error {
-	result := database.DB.Where(&user).Find(&user)
+	result := database.DB.Find(&user)
 	return result.Error
 }
 
 func View() {}
+
+func Update(user *model.User, condition interface{}, args ...interface{}) error {
+	result := database.DB.Model(user).Where(condition, args).Update(user)
+	return result.Error
+}
 
 func Delete(user *model.User) error {
 	result := database.DB.Delete(&user)

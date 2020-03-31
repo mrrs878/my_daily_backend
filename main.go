@@ -5,6 +5,8 @@ import (
 	"demo_1/src/config"
 	"demo_1/src/controller"
 	"demo_1/src/database"
+	"demo_1/src/service/msg"
+	"demo_1/src/service/ws"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -31,11 +33,19 @@ func main() {
 	log.Println("|  Go Http Server Start Successful  |")
 	log.Println("|    Port" + config.AppPort + "     Pid:" + fmt.Sprintf("%d", os.Getpid()) + "        |")
 
+	go ws.WebSocketManager.Start()
+	go ws.WebSocketManager.SendService()
+	go ws.WebSocketManager.SendService()
+	go ws.WebSocketManager.SendGroupService()
+	go ws.WebSocketManager.SendGroupService()
+	go ws.WebSocketManager.SendAllService()
+	go ws.WebSocketManager.SendAllService()
 	go func() {
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("http server listen: %s\n", err)
 		}
 	}()
+	go msg.Setup()
 
 	signalChan := make(chan os.Signal)
 	signal.Notify(signalChan, os.Interrupt)

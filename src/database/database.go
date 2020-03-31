@@ -30,8 +30,9 @@ func SetUpDatabase() {
 	db.Set("gorm:table_options", "charset=utf8mb4").
 		AutoMigrate(&model.User{}).
 		AutoMigrate(&model.Task{}).
-		AutoMigrate(&model.Subscription{})
+		AutoMigrate(&model.Subscription{}).
+		AutoMigrate(&model.Habit{}).
+		AutoMigrate(&model.Message{})
 	DB = db
 	log.Println("|    connected to database        |")
-	//defer db.Close()
 }

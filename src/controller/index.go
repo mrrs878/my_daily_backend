@@ -5,10 +5,12 @@ import (
 	"demo_1/src/middleware"
 	"demo_1/src/service/auth"
 	"demo_1/src/service/dataDict"
-	"demo_1/src/service/goods"
+	"demo_1/src/service/habit"
+	"demo_1/src/service/msg"
 	"demo_1/src/service/sw"
 	"demo_1/src/service/task"
 	"demo_1/src/service/user"
+	"demo_1/src/service/ws"
 	"demo_1/src/util"
 	"github.com/gin-gonic/gin"
 )
@@ -49,6 +51,7 @@ func SetupRouter(engine *gin.Engine) {
 	{
 		AuthRouter.POST("/login", auth.Login)
 		AuthRouter.POST("/register", auth.Register)
+		AuthRouter.GET("/github/:code", auth.LoginByGitHub)
 	}
 
 	SubscriptionRouter := engine.Group("/sw")
@@ -58,12 +61,23 @@ func SetupRouter(engine *gin.Engine) {
 		SubscriptionRouter.POST("/push", sw.PushMessage)
 	}
 
-	GoodsRouter := engine.Group("/goods")
-	GoodsRouter.Use(middleware.JWTAuth())
+	HabitRouter := engine.Group("/habit")
+	HabitRouter.Use(middleware.JWTAuth())
 	{
-		GoodsRouter.GET("/class/:class/page/:page", goods.GetGoodsByClassAndPage)
-		GoodsRouter.POST("/", goods.CreateGoods)
-		GoodsRouter.PUT("/", goods.UpdateGoods)
+		HabitRouter.POST("", habit.CreateHabit)
+		HabitRouter.PUT("", habit.UpdateHabit)
+		HabitRouter.GET("/:id", habit.IndexHabit)
+		HabitRouter.GET("", habit.ViewHabitsByUser)
+		HabitRouter.DELETE("/:id", habit.DeleteHabit)
+	}
+
+	MsgRouter := engine.Group("/msg")
+	{
+		MsgRouter.GET("/:id", ws.WebSocketManager.WsClient)
+		MsgRouter.GET("", msg.ViewMsgByUser)
+		MsgRouter.POST("", msg.CreateMessage)
+		MsgRouter.DELETE("/:id", msg.DeleteMsg)
+		MsgRouter.PUT("/:id", msg.UpdateMsg)
 	}
 
 	DataDictRouter := engine.Group("/dataDict")
