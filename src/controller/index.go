@@ -10,8 +10,8 @@ import (
 	"demo_1/src/service/sw"
 	"demo_1/src/service/task"
 	"demo_1/src/service/user"
-	"demo_1/src/service/ws"
 	"demo_1/src/util"
+	"demo_1/src/util/ws"
 	"github.com/gin-gonic/gin"
 )
 
@@ -74,7 +74,7 @@ func SetupRouter(engine *gin.Engine) {
 	MsgRouter := engine.Group("/msg")
 	{
 		MsgRouter.GET("/:id", ws.WebSocketManager.WsClient)
-		MsgRouter.GET("", msg.ViewMsgByUser)
+		MsgRouter.GET("", msg.ViewsMsg)
 		MsgRouter.POST("", msg.CreateMessage)
 		MsgRouter.DELETE("/:id", msg.DeleteMsg)
 		MsgRouter.PUT("/:id", msg.UpdateMsg)

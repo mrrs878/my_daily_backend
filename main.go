@@ -6,7 +6,7 @@ import (
 	"demo_1/src/controller"
 	"demo_1/src/database"
 	"demo_1/src/service/msg"
-	"demo_1/src/service/ws"
+	"demo_1/src/util/ws"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"

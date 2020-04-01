@@ -6,9 +6,11 @@ import (
 	"demo_1/src/model"
 	"demo_1/src/repositories/message"
 	"demo_1/src/repositories/user"
-	"demo_1/src/service/ws"
+	"demo_1/src/tool"
+	"demo_1/src/types"
 	"demo_1/src/util"
 	"demo_1/src/util/pushSub"
+	"demo_1/src/util/ws"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -18,6 +20,10 @@ import (
 type wsMsg struct {
 	Label string `json:"label"`
 	Data  string `json:"data"`
+}
+type wsResMsg struct {
+	Success bool   `json:"success"`
+	Data    string `json:"data"`
 }
 
 func pushMsgList(params interface{}) {
@@ -30,7 +36,7 @@ func pushMsgList(params interface{}) {
 		ws.WebSocketManager.SendAll([]byte(err.Error()))
 		return
 	}
-	err = viewMsgByUser(uint(userId), &msgList)
+	err = viewsMsg(&msgList, "user_id=?", uint(userId))
 	if err != nil {
 		ws.WebSocketManager.SendAll([]byte(err.Error()))
 		return
@@ -48,7 +54,7 @@ func pushMsgList(params interface{}) {
 		return
 	}
 
-	err = user.Update(&model.User{WsGroup: client.Group, WsId: client.Id}, "name = ?", client.Id)
+	err = user.Update(&model.User{WsGroup: client.Group, WsId: client.Id}, "id = ?", uint(userId))
 	if err != nil {
 		log.Println("send ws msg error: ", err.Error())
 		return
@@ -72,12 +78,115 @@ func pushMsg(param *model.Message) {
 	ws.WebSocketManager.Send(strconv.FormatInt(int64(param.UserId), 10), "msg", res)
 }
 
+var ReceivedHandlers = map[string]func(*wsMsg) ([]byte, error){
+	"ReadAll": func(msgData *wsMsg) ([]byte, error) {
+		_msg := model.Message{}
+		var _msgList []model.Message
+		if err := json.Unmarshal([]byte(msgData.Data), &_msg); err != nil {
+			return nil, err
+		}
+		newVal := types.UpdateNewVal{
+			"status": _msg.Status,
+		}
+		if err := updatesMsg(&newVal, &_msgList, "user_id = ?", _msg.UserId); err != nil {
+			log.Println(err.Error())
+			return nil, err
+		}
+		data, err := json.Marshal(_msgList)
+		return data, err
+	},
+	"ReadOne": func(msgData *wsMsg) ([]byte, error) {
+		_msg := model.Message{}
+		if err := json.Unmarshal([]byte(msgData.Data), &_msg); err != nil {
+			return nil, err
+		}
+		_msg.Status = 1
+		if err := updateMsg(&_msg, "id=?", _msg.ID); err != nil {
+			return nil, err
+		}
+		data, err := json.Marshal(_msg)
+		return data, err
+	},
+	"GetAll": func(msgData *wsMsg) ([]byte, error) {
+		_msg := model.Message{}
+		if err := json.Unmarshal([]byte(msgData.Data), &_msg); err != nil {
+			return nil, err
+		}
+		var _msgList []model.Message
+		err := viewsMsg(&_msgList, "user_id=?", _msg.UserId)
+		data, err := json.Marshal(_msgList)
+		return data, err
+	},
+	"RemoveOne": func(msgData *wsMsg) ([]byte, error) {
+		_msg := model.Message{}
+		if err := json.Unmarshal([]byte(msgData.Data), &_msg); err != nil {
+			return nil, err
+		}
+		err := deleteMsg(_msg.ID, _msg.UserId)
+		data, err := json.Marshal(struct{ ID uint }{
+			ID: _msg.ID,
+		})
+		return data, err
+	},
+}
+
+func sendResponseMsg(resData *wsMsg, msgData *ws.MessageData) {
+	res, err := json.Marshal(&resData)
+	if err != nil {
+		log.Println("send ws msg error: ", err.Error())
+		res = []byte(err.Error())
+	}
+	ws.WebSocketManager.Send(msgData.Id, msgData.Group, res)
+}
+func receivedMsg(params interface{}) {
+	msgData := params.(*ws.MessageData)
+	_msgData := wsMsg{}
+	resData := wsMsg{}
+	resDataData := wsResMsg{}
+	defer func() {
+		if err := recover(); err != nil {
+			log.Println(err)
+			sendResponseMsg(&resData, msgData)
+		}
+	}()
+
+	if err := json.Unmarshal(msgData.Message, &_msgData); err != nil {
+		resDataData.Success = false
+		resDataData.Data = err.Error()
+		panic("")
+	}
+
+	fn := ReceivedHandlers[_msgData.Label]
+	resData.Label = _msgData.Label
+	if fn == nil {
+		resDataData.Success = false
+		resDataData.Data = ""
+		panic("")
+	}
+	data, err := fn(&_msgData)
+	if err != nil {
+		resDataData.Success = false
+		resDataData.Data = err.Error()
+		panic("")
+	}
+	resDataData.Data = string(data)
+	resDataData.Success = true
+	tmp, err := json.Marshal(resDataData)
+	resData.Data = string(tmp)
+	sendResponseMsg(&resData, msgData)
+}
+
 func Setup() {
-	suber := pushSub.Suber{
-		Label: "clientConnected",
+	connSuber := pushSub.Suber{
+		Label: "msgClientConnected",
 		Cb:    pushMsgList,
 	}
-	suber.Sub("clientConnected")
+	connSuber.Sub("msgClientConnected")
+	msgSuber := pushSub.Suber{
+		Label: "receivedMsg",
+		Cb:    receivedMsg,
+	}
+	msgSuber.Sub("msgClientReceived")
 }
 
 func CreateMessage(c *gin.Context) {
@@ -102,16 +211,68 @@ func CreateMessage(c *gin.Context) {
 	pushMsg(&_msg)
 }
 
-func UpdateMsg(c *gin.Context) {}
+func updateMsg(msg *model.Message, args ...interface{}) error {
+	err := message.Update(msg, args[0], args[1:]...)
+	return err
+}
+func UpdateMsg(c *gin.Context) {
+	utilGin := util.GinS{Ctx: c}
+	_msg := model.Message{}
+	if err := c.ShouldBindJSON(&_msg); err != nil {
+		utilGin.Response(constant.FAILED, err.Error(), nil)
+		return
+	}
+	err := updateMsg(&_msg)
+	if err != nil {
+		utilGin.Response(constant.FAILED, err.Error(), nil)
+		return
+	}
+	utilGin.Response(constant.SUCCESS, "更新成功", nil)
+}
 
-func DeleteMsg(c *gin.Context) {}
-
-func viewMsgByUser(userId uint, msgList *[]model.Message) error {
-	err := message.ViewWithCondition(msgList, "user_id = ?", userId)
+func updatesMsg(newVal *types.UpdateNewVal, msg *[]model.Message, args ...interface{}) error {
+	err := message.Updates(newVal, msg, args[0], args[1:]...)
 	return err
 }
 
-func ViewMsgByUser(c *gin.Context) {
+func deleteMsg(id uint, userId uint) error {
+	_message := model.Message{}
+	var err error = nil
+	_message.ID = id
+	_message.DeleteId = userId
+	if err = message.Del(&_message); err != nil {
+		return err
+	}
+	return nil
+}
+func DeleteMsg(c *gin.Context) {
+	utilGin := util.GinS{Ctx: c}
+	var msgId, userId uint
+	var err error
+	defer func() {
+		if err := recover(); err != nil {
+			utilGin.Response(constant.FAILED, err.(string), nil)
+		}
+	}()
+	msgId, err = tool.String2Uint(c.Param("id"))
+	if err != nil {
+		panic(err.Error())
+	}
+	userId, err = functions.GetUserIDFormContext(c)
+	if err != nil {
+		panic(err.Error())
+	}
+	if err = deleteMsg(msgId, userId); err != nil {
+		panic(err.Error())
+	}
+	utilGin.Response(constant.SUCCESS, "删除成功", nil)
+}
+
+func viewsMsg(msgList *[]model.Message, args ...interface{}) error {
+	err := message.ViewWithCondition(msgList, args[0], args[1:]...)
+	return err
+}
+func ViewsMsg(c *gin.Context) {
 	utilGin := util.GinS{Ctx: c}
 	userId, err := functions.GetUserIDFormContext(c)
 	if err != nil {
@@ -120,7 +281,7 @@ func ViewMsgByUser(c *gin.Context) {
 	}
 
 	var _msgList []model.Message
-	err = viewMsgByUser(userId, &_msgList)
+	err = viewsMsg(&_msgList, "user_id=?", userId)
 	if err != nil {
 		utilGin.Response(constant.SUCCESS, err.Error(), nil)
 		return

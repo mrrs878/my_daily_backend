@@ -34,5 +34,5 @@ func SetUpDatabase() {
 		AutoMigrate(&model.Habit{}).
 		AutoMigrate(&model.Message{})
 	DB = db
-	log.Println("|    connected to database        |")
+	log.Println("|      connected to database        |")
 }
