@@ -7,12 +7,13 @@ import (
 )
 
 func Add(msg *model.Message) error {
-	result := database.DB.Create(&msg)
+	result := database.DB.Create(&msg).Find(msg)
 	return result.Error
 }
 
 func Del(msg *model.Message) error {
-	err := Update(msg, "id = ?", msg.ID)
+	_newVal := types.UpdateNewVal{"UpdateId": msg.UpdateId}
+	err := Update(&_newVal, msg, "id = ?", msg.ID)
 	if err != nil {
 		return err
 	}
@@ -20,13 +21,8 @@ func Del(msg *model.Message) error {
 	return result.Error
 }
 
-func Update(newVal *model.Message, condition interface{}, args ...interface{}) error {
-	result := database.DB.Table("message").Where(condition, args).Update(newVal).Find(newVal)
-	return result.Error
-}
-
-func Updates(newVal *types.UpdateNewVal, msg *[]model.Message, condition interface{}, args ...interface{}) error {
-	result := database.DB.Table("message").Where(condition, args).Updates(newVal).Find(msg)
+func Update(newVal *types.UpdateNewVal, out interface{}, condition interface{}, args ...interface{}) error {
+	result := database.DB.Table("message").Where(condition, args).Update(*newVal).Find(out)
 	return result.Error
 }
 
@@ -35,8 +31,8 @@ func Index(msg *model.Message) error {
 	return result.Error
 }
 
-func View(msg *[]model.Message) error {
-	result := database.DB.Find(msg)
+func View(out *[]model.Message, condition interface{}, args ...interface{}) error {
+	result := database.DB.Where(condition, args).Find(out)
 	return result.Error
 }
 

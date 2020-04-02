@@ -29,35 +29,35 @@ type wsResMsg struct {
 func pushMsgList(params interface{}) {
 	client := params.(*ws.Client)
 
+	defer func() {
+		if err := recover(); err != nil {
+			ws.WebSocketManager.SendAll(err.([]byte))
+		}
+	}()
 	msg := wsMsg{}
 	var msgList []model.Message
 	userId, err := strconv.ParseUint(client.Id, 10, 64)
 	if err != nil {
-		ws.WebSocketManager.SendAll([]byte(err.Error()))
-		return
+		panic(err)
 	}
 	err = viewsMsg(&msgList, "user_id=?", uint(userId))
 	if err != nil {
-		ws.WebSocketManager.SendAll([]byte(err.Error()))
-		return
+		panic(err)
 	}
 	msg.Label = "pushMsgList"
 	data, err := json.Marshal(msgList)
 	if err != nil {
-		log.Println("send ws msg error: ", err.Error())
-		return
+		panic(err)
 	}
 	msg.Data = string(data)
 	res, err := json.Marshal(&msg)
 	if err != nil {
-		log.Println("send ws msg error: ", err.Error())
-		return
+		panic(err)
 	}
 
 	err = user.Update(&model.User{WsGroup: client.Group, WsId: client.Id}, "id = ?", uint(userId))
 	if err != nil {
-		log.Println("send ws msg error: ", err.Error())
-		return
+		panic(err)
 	}
 	ws.WebSocketManager.Send(client.Id, client.Group, res)
 }
@@ -88,7 +88,7 @@ var ReceivedHandlers = map[string]func(*wsMsg) ([]byte, error){
 		newVal := types.UpdateNewVal{
 			"status": _msg.Status,
 		}
-		if err := updatesMsg(&newVal, &_msgList, "user_id = ?", _msg.UserId); err != nil {
+		if err := updateMsg(&newVal, &_msgList, "user_id=?", _msg.UserId); err != nil {
 			log.Println(err.Error())
 			return nil, err
 		}
@@ -96,12 +96,13 @@ var ReceivedHandlers = map[string]func(*wsMsg) ([]byte, error){
 		return data, err
 	},
 	"ReadOne": func(msgData *wsMsg) ([]byte, error) {
+		_newVal := types.UpdateNewVal{"status": 1}
 		_msg := model.Message{}
 		if err := json.Unmarshal([]byte(msgData.Data), &_msg); err != nil {
 			return nil, err
 		}
 		_msg.Status = 1
-		if err := updateMsg(&_msg, "id=?", _msg.ID); err != nil {
+		if err := updateMsg(&_newVal, &_msg, "id=?", _msg.ID); err != nil {
 			return nil, err
 		}
 		data, err := json.Marshal(_msg)
@@ -211,28 +212,24 @@ func CreateMessage(c *gin.Context) {
 	pushMsg(&_msg)
 }
 
-func updateMsg(msg *model.Message, args ...interface{}) error {
-	err := message.Update(msg, args[0], args[1:]...)
+func updateMsg(newVal *types.UpdateNewVal, out interface{}, args ...interface{}) error {
+	err := message.Update(newVal, out, args[0], args[1:]...)
 	return err
 }
 func UpdateMsg(c *gin.Context) {
 	utilGin := util.GinS{Ctx: c}
+	_newVal := types.UpdateNewVal{}
 	_msg := model.Message{}
-	if err := c.ShouldBindJSON(&_msg); err != nil {
+	if err := c.ShouldBindJSON(&_newVal); err != nil {
 		utilGin.Response(constant.FAILED, err.Error(), nil)
 		return
 	}
-	err := updateMsg(&_msg)
+	err := updateMsg(&_newVal, &_msg)
 	if err != nil {
 		utilGin.Response(constant.FAILED, err.Error(), nil)
 		return
 	}
 	utilGin.Response(constant.SUCCESS, "更新成功", nil)
-}
-
-func updatesMsg(newVal *types.UpdateNewVal, msg *[]model.Message, args ...interface{}) error {
-	err := message.Updates(newVal, msg, args[0], args[1:]...)
-	return err
 }
 
 func deleteMsg(id uint, userId uint) error {

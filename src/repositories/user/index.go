@@ -11,7 +11,7 @@ func Add(user *model.User) (interface{}, error) {
 }
 
 func Index(user *model.User) error {
-	result := database.DB.Find(&user)
+	result := database.DB.Where(user).Find(user)
 	return result.Error
 }
 

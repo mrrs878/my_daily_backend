@@ -22,7 +22,7 @@ import (
 func Login(c *gin.Context) {
 	utilGin := util.GinS{Ctx: c}
 	loginForm := types.LoginForm{}
-	if err := c.BindJSON(&loginForm); err != nil {
+	if err := c.ShouldBindJSON(&loginForm); err != nil {
 		utilGin.Response(constant.FAILED, err.Error(), nil)
 		return
 	}
